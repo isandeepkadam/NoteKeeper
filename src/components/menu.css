@@ -1,0 +1,103 @@
+nav {
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  width: 300px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-135deg);
+}
+.nav-content .toggle-btn,
+.nav-content span a {
+  height: 60px;
+  width: 60px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+.nav-content .toggle-btn {
+  font-size: 35px;
+  color: #0e2431;
+  z-index: 1000;
+  cursor: pointer;
+  transform: rotate(45deg);
+  transition: all 0.6s;
+}
+nav.open .toggle-btn {
+  transform: rotate(-225deg);
+}
+.nav-content span {
+  position: absolute;
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+nav.open .nav-content span {
+  transform: rotate(calc(var(--i) * (360deg / 8))) translateY(120px);
+  opacity: 1;
+}
+.nav-content span a {
+  text-decoration: none;
+  transform: rotate(45deg);
+}
+.nav-content span a i {
+  font-size: 24px;
+  color: #0e2431;
+  transform: rotate(90deg);
+  /* transform: rotate(calc(var(--i) * (180deg))); */
+  opacity: 0.8;
+}
+
+.nav-content span a:hover i {
+  opacity: 1;
+  transition: 0.2s;
+}
+/* Resposive */
+@media (max-width: 500px) {
+  nav {
+    /* position: absolute; */
+    top: 5px;
+    left: 20px;
+    width: 200px;
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .nav-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .nav-content .toggle-btn,
+  .nav-content span a {
+    height: 45px;
+    width: 45px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  }
+  nav.open .nav-content span {
+    transform: rotate(calc(var(--i) * (120deg / 4))) translateY(90px);
+    opacity: 1;
+  }
+  .nav-content span a i {
+    font-size: 24px;
+    color: #0e2431;
+    /* transform: rotate(90deg); */
+    /* transform: rotate(calc(var(--i) * (180deg))); */
+    opacity: 0.8;
+  }
+}
