@@ -1,29 +1,20 @@
 import { Container, Grid } from '@mui/material';
-import React from 'react';
-import { Note } from '../components';
-import NoteCard from '../components/NoteCard';
+import { NoteCard } from '../components';
+//store
+import { RootState, useAppSelector } from '../store';
 
-function Archives({
-  notes,
-  archiveNote,
-  deleteNote,
-}: {
-  notes: Note[];
-  deleteNote: (id: string) => void;
-  archiveNote: (id: string) => void;
-}) {
+function Archives() {
+  const notes = useAppSelector((state: RootState) => state.note);
+
+  const archivedNotes = notes.filter((note) => note.archieved && !note.trash);
+
   return (
     <Container>
       <Grid container spacing={4}>
-        {notes.map((item) => {
+        {archivedNotes.map((item) => {
           return (
-            <Grid item xs={4} sx={{ marginBottom: '10px' }}>
-              <NoteCard
-                notes={notes}
-                note={item}
-                archiveNote={archiveNote}
-                deleteNote={deleteNote}
-              />
+            <Grid item xs={4} sx={{ marginBottom: '10px' }} key={item.id}>
+              <NoteCard note={item} />
             </Grid>
           );
         })}

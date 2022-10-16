@@ -25,7 +25,47 @@ export const noteSlice = createSlice({
     addNote: (state: Notes, action: PayloadAction<Note>) => {
       state.push(action.payload);
     },
+    archiveNote: (state: Notes, action: PayloadAction<string>) => {
+      return state.map((note) =>
+        note.id === action.payload
+          ? { ...note, archieved: true, trash: false }
+          : note
+      );
+    },
+    deleteNote: (state: Notes, action: PayloadAction<string>) => {
+      return state.map((note) =>
+        note.id === action.payload
+          ? { ...note, trash: true, archieved: false }
+          : note
+      );
+    },
+    unarchiveNote: (state: Notes, action: PayloadAction<string>) => {
+      return state.map((note) =>
+        note.id === action.payload
+          ? { ...note, archieved: false, trash: false }
+          : note
+      );
+    },
+    restoreNote: (state: Notes, action: PayloadAction<string>) => {
+      return state.map((note) =>
+        note.id === action.payload
+          ? { ...note, trash: false, archieved: false }
+          : note
+      );
+    },
+    deleteForever: (state: Notes, action: PayloadAction<string>) => {
+      return state.filter((item) => {
+        return item.id !== action.payload;
+      });
+    },
   },
 });
 
-export const { addNote } = noteSlice.actions;
+export const {
+  addNote,
+  archiveNote,
+  deleteNote,
+  unarchiveNote,
+  restoreNote,
+  deleteForever,
+} = noteSlice.actions;

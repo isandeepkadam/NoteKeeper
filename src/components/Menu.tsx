@@ -15,7 +15,6 @@ const Menu = () => {
           onClick={() => setOpenIcons((prev) => !prev)}
         >
           <i className="bx bx-menu"></i>
-          {/* <i className="bx bx-bullseye"></i> */}
         </div>
         <span style={{ '--i': 1 } as Css} title="Trash">
           <Link to="/trash">

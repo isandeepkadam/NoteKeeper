@@ -54,7 +54,7 @@ nav.open .nav-content span {
   font-size: 24px;
   color: #0e2431;
   transform: rotate(90deg);
-  /* transform: rotate(calc(var(--i) * (180deg))); */
+  transform: rotate(calc(var(--i) * (90deg)));
   opacity: 0.8;
 }
 
@@ -96,8 +96,22 @@ nav.open .nav-content span {
   .nav-content span a i {
     font-size: 24px;
     color: #0e2431;
-    /* transform: rotate(90deg); */
-    /* transform: rotate(calc(var(--i) * (180deg))); */
+    /* transform: rotate(calc(var(--i) * (360deg / 8))) translateY(120px); */
     opacity: 0.8;
+  }
+  .nav-content span a i:nth-child(1) {
+    transform: rotate(0deg);
+  }
+  .nav-content span a i:nth-child(2) {
+    transform: rotate(0deg);
+  }
+  .nav-content span a i:nth-child(3) {
+    transform: rotate(90deg);
+  }
+  .nav-content span a i:nth-child(4) {
+    transform: rotate(120deg);
+  }
+  .nav-content span a i:nth-child(5) {
+    transform: rotate(120deg);
   }
 }

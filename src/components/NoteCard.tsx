@@ -4,17 +4,28 @@ import {
   ArchiveOutlined as Archive,
   DeleteOutlineOutlined as Delete,
   DeleteForever,
+  Unarchive,
+  RestoreFromTrash,
 } from '@mui/icons-material';
-
-import { Note } from '.';
+import { Note } from '../store/noteSlice';
 import Tags from './Tags';
 
+// store
+import { useAppDispatch } from '../store';
+import {
+  archiveNote,
+  deleteNote,
+  unarchiveNote,
+  restoreNote,
+  deleteForever,
+} from '../store/noteSlice';
+//
+
 const NoteCard: React.FunctionComponent<{
-  notes: Note[];
   note: Note;
-  deleteNote: (id: string) => void;
-  archiveNote: (id: string) => void;
-}> = ({ notes, note, deleteNote, archiveNote }) => {
+}> = ({ note }) => {
+  const dispatch = useAppDispatch();
+
   return (
     <Card
       sx={{
@@ -32,21 +43,47 @@ const NoteCard: React.FunctionComponent<{
         <Typography>{note.text}</Typography>
         <Tags labels={note.labels} />
       </CardContent>
-      <CardActions sx={{ margin: '10px' }}>
-        <Archive
-          fontSize="small"
-          style={{ marginLeft: 'auto' }}
-          onClick={() => archiveNote(note.id)}
-        />
-        <Delete
-          fontSize="small"
-          style={{ marginRight: '0' }}
-          onClick={() => deleteNote(note.id)}
-        />
-        <DeleteForever
-          fontSize="small"
-          style={{ marginRight: '0' }}
-        ></DeleteForever>
+      <CardActions sx={{ marginRight: '10px' }}>
+        {!note.archieved && !note.trash ? (
+          <>
+            <Archive
+              fontSize="small"
+              // style={{ marginLeft: 'auto' }}
+              onClick={() => dispatch(archiveNote(note.id))}
+            />
+            <Delete
+              fontSize="small"
+              // style={{ marginLeft: 'auto' }}
+              onClick={() => dispatch(deleteNote(note.id))}
+            ></Delete>
+          </>
+        ) : note.archieved ? (
+          <>
+            <Unarchive
+              fontSize="small"
+              // style={{ marginLeft: 'auto' }}
+              onClick={() => dispatch(unarchiveNote(note.id))}
+            ></Unarchive>
+            <Delete
+              fontSize="small"
+              // style={{ marginLeft: 'auto' }}
+              onClick={() => dispatch(deleteNote(note.id))}
+            />
+          </>
+        ) : note.trash ? (
+          <>
+            <RestoreFromTrash
+              fontSize="small"
+              // style={{ marginLeft: 'auto' }}
+              onClick={() => dispatch(restoreNote(note.id))}
+            ></RestoreFromTrash>
+            <DeleteForever
+              fontSize="small"
+              // style={{ marginLeft: 'auto' }}
+              onClick={() => dispatch(deleteForever(note.id))}
+            ></DeleteForever>
+          </>
+        ) : null}
       </CardActions>
     </Card>
   );

@@ -12,7 +12,7 @@ function Navbar() {
       }}
     >
       <Toolbar>
-        <img src="/Collab-bro.svg" style={{ width: '40px' }} alt="logo" />
+        <img src="/note.svg" style={{ width: '40px' }} alt="logo" />
         <Typography
           sx={{
             margin: 'auto',

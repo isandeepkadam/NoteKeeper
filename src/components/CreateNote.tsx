@@ -1,18 +1,11 @@
 import { ClickAwayListener, TextField, Container } from '@mui/material';
 import { nanoid } from 'nanoid';
-import React, { useState, useRef } from 'react';
-import { Note } from '.';
-
+import { useState, useRef } from 'react';
 // store
-
 import { useAppDispatch } from '../store';
 import { addNote } from '../store/noteSlice';
 
-interface props {
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
-}
-
-const CreateNote: React.FunctionComponent<props> = ({ setNotes }) => {
+const CreateNote = () => {
   const [showTextField, setShowtextField] = useState(false);
   const [note, setNote] = useState({
     heading: '',
@@ -25,7 +18,7 @@ const CreateNote: React.FunctionComponent<props> = ({ setNotes }) => {
   });
 
   const dispatch = useAppDispatch();
-  //   const { setNotes } = useContext(DataContext);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const onTextAreaClick = () => {
@@ -47,8 +40,6 @@ const CreateNote: React.FunctionComponent<props> = ({ setNotes }) => {
     });
 
     if (note.heading || note.text) {
-      console.log(note);
-      setNotes((prev) => [note, ...prev]);
       dispatch(addNote(note));
     }
   };

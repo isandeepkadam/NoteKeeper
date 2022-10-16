@@ -1,35 +1,22 @@
 import { Grid } from '@mui/material';
 import { Container } from '@mui/system';
-import React from 'react';
-import { Note } from '../components';
-import CreateNote from '../components/CreateNote';
-import NoteCard from '../components/NoteCard';
+import { CreateNote, NoteCard } from '../components';
+//Store
+import { RootState, useAppSelector } from '../store';
 
-function Home({
-  notes,
-  archiveNote,
-  deleteNote,
-  setNotes,
-}: {
-  notes: Note[];
-  deleteNote: (id: string) => void;
-  archiveNote: (id: string) => void;
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
-}) {
+function Home() {
+  const notes = useAppSelector((state: RootState) => state.note);
+  const displayNotes = notes.filter((note) => !note.archieved && !note.trash);
+
   return (
     <>
-      <CreateNote setNotes={setNotes} />
+      <CreateNote />
       <Container>
         <Grid container spacing={4}>
-          {notes.map((item) => {
+          {displayNotes.map((item) => {
             return (
-              <Grid item xs={4} sx={{ marginBottom: '10px' }}>
-                <NoteCard
-                  notes={notes}
-                  note={item}
-                  archiveNote={archiveNote}
-                  deleteNote={deleteNote}
-                />
+              <Grid item xs={4} sx={{ marginBottom: '10px' }} key={item.id}>
+                <NoteCard note={item} />
               </Grid>
             );
           })}
