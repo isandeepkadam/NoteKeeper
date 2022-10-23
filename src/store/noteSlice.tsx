@@ -18,6 +18,8 @@ export type Notes = Note[];
 
 const initialState: Notes = [];
 
+let tagsTuple: [string, Label[]];
+
 export const noteSlice = createSlice({
   name: 'notes',
   initialState,
@@ -58,6 +60,27 @@ export const noteSlice = createSlice({
         return item.id !== action.payload;
       });
     },
+    updateNote: (state: Notes, action: PayloadAction<Note>) => {
+      return state.map((note) =>
+        note.id === action.payload.id
+          ? {
+              ...note,
+              heading: action.payload.heading,
+              text: action.payload.text,
+            }
+          : note
+      );
+    },
+    updateTags: (state: Notes, action: PayloadAction<typeof tagsTuple>) => {
+      return state.map((note) =>
+        note.id === action.payload[0]
+          ? {
+              ...note,
+              labels: action.payload[1],
+            }
+          : note
+      );
+    },
   },
 });
 
@@ -68,4 +91,6 @@ export const {
   unarchiveNote,
   restoreNote,
   deleteForever,
+  updateNote,
+  updateTags,
 } = noteSlice.actions;

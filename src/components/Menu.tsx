@@ -1,6 +1,8 @@
 import './menu.css';
 import { CSSProperties, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+import Labels from './Labels';
 export interface Css extends CSSProperties {
   '--i': number;
 }
@@ -17,7 +19,7 @@ const Menu = () => {
           <i className="bx bx-menu"></i>
         </div>
         <span style={{ '--i': 1 } as Css} title="Trash">
-          <Link to="/trash">
+          <Link to="/trash" className="">
             <i className="bx bxs-trash"></i>
           </Link>
         </span>
@@ -32,9 +34,7 @@ const Menu = () => {
           </Link>
         </span>
         <span style={{ '--i': 4 } as Css} title="Labels">
-          <Link to="/label">
-            <i className="bx bxs-label"></i>
-          </Link>
+          <Labels />
         </span>
         <span style={{ '--i': 5 } as Css} title="Reminders">
           <Link to="/reminders">

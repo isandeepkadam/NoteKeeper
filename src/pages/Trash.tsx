@@ -1,4 +1,4 @@
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import { NoteCard } from '../components';
 // Store
 import { RootState, useAppSelector } from '../store';
@@ -9,6 +9,7 @@ function Trash() {
 
   return (
     <Container>
+      <Typography>Trash</Typography>
       <Grid container spacing={4}>
         {deletedNotes.map((item) => {
           return (

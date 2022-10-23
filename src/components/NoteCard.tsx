@@ -1,4 +1,12 @@
-import { Card, CardActions, CardContent, Typography } from '@mui/material';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  ListItem,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 
 import {
   ArchiveOutlined as Archive,
@@ -6,82 +14,182 @@ import {
   DeleteForever,
   Unarchive,
   RestoreFromTrash,
+  ColorLensOutlined,
 } from '@mui/icons-material';
-import { Note } from '../store/noteSlice';
-import Tags from './Tags';
 
-// store
 import { useAppDispatch } from '../store';
+import { Note } from '../store/noteSlice';
+import { handleOpen } from '../store/snackBarSlice';
+// store
 import {
   archiveNote,
   deleteNote,
   unarchiveNote,
   restoreNote,
   deleteForever,
+  updateTags,
 } from '../store/noteSlice';
-//
+import { EditNote, Label } from '.';
+
+import { useDrag } from 'react-dnd';
 
 const NoteCard: React.FunctionComponent<{
   note: Note;
 }> = ({ note }) => {
   const dispatch = useAppDispatch();
 
+  const deleteTag = (noteID: string, item: Label) => {
+    const removedTag = note.labels.filter((n) => n.title !== item.title);
+    dispatch(updateTags([noteID, removedTag]));
+  };
+
+  //Drop
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'note',
+    item: { id: note.id },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   return (
     <Card
+      ref={drag}
       sx={{
         width: '300px',
         minHeight: '200px',
         maxHeight: 'max-content',
-        margin: '8px',
         boxShadow: 'none',
-        border: '1px solid #e0e0e0',
+        border: isDragging ? '1px dotted #e0e0e0' : '1px solid #e0e0e0',
         borderRadius: '8px',
+        backgroundColor: '',
       }}
     >
       <CardContent>
-        <Typography>{note.heading}</Typography>
+        <Typography variant="h6">{note.heading}</Typography>
         <Typography>{note.text}</Typography>
-        <Tags labels={note.labels} />
+        {note.labels.map((item) => {
+          return (
+            <ListItem>
+              <Chip
+                label={item.title}
+                variant="outlined"
+                size="small"
+                onDelete={() => deleteTag(note.id, item)}
+              />
+            </ListItem>
+          );
+        })}
       </CardContent>
-      <CardActions sx={{ marginRight: '10px' }}>
+      <CardActions
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
         {!note.archieved && !note.trash ? (
           <>
-            <Archive
-              fontSize="small"
-              // style={{ marginLeft: 'auto' }}
-              onClick={() => dispatch(archiveNote(note.id))}
-            />
-            <Delete
-              fontSize="small"
-              // style={{ marginLeft: 'auto' }}
-              onClick={() => dispatch(deleteNote(note.id))}
-            ></Delete>
+            <Tooltip title="color">
+              <ColorLensOutlined />
+            </Tooltip>
+            <Tooltip title="Archive">
+              <Archive
+                fontSize="small"
+                onClick={() => {
+                  dispatch(archiveNote(note.id));
+                  dispatch(
+                    handleOpen({
+                      snackBarMessage: 'archived',
+                      snackBarOpen: true,
+                      snackBarType: 'success',
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
+            <Tooltip title="Delete">
+              <Delete
+                fontSize="small"
+                onClick={() => {
+                  dispatch(deleteNote(note.id));
+                  dispatch(
+                    handleOpen({
+                      snackBarMessage: 'Moved to trash',
+                      snackBarOpen: true,
+                      snackBarType: 'success',
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
+            <EditNote note={note} />
           </>
         ) : note.archieved ? (
           <>
-            <Unarchive
-              fontSize="small"
-              // style={{ marginLeft: 'auto' }}
-              onClick={() => dispatch(unarchiveNote(note.id))}
-            ></Unarchive>
-            <Delete
-              fontSize="small"
-              // style={{ marginLeft: 'auto' }}
-              onClick={() => dispatch(deleteNote(note.id))}
-            />
+            <Tooltip title="Unarchive">
+              <Unarchive
+                fontSize="small"
+                onClick={() => {
+                  dispatch(unarchiveNote(note.id));
+                  dispatch(
+                    handleOpen({
+                      snackBarMessage: 'Note Unarchived',
+                      snackBarOpen: true,
+                      snackBarType: 'success',
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
+            <Tooltip title="Delete">
+              <Delete
+                fontSize="small"
+                onClick={() => {
+                  dispatch(deleteNote(note.id));
+                  dispatch(
+                    handleOpen({
+                      snackBarMessage: 'Moved to Trash',
+                      snackBarOpen: true,
+                      snackBarType: 'success',
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
           </>
         ) : note.trash ? (
           <>
-            <RestoreFromTrash
-              fontSize="small"
-              // style={{ marginLeft: 'auto' }}
-              onClick={() => dispatch(restoreNote(note.id))}
-            ></RestoreFromTrash>
-            <DeleteForever
-              fontSize="small"
-              // style={{ marginLeft: 'auto' }}
-              onClick={() => dispatch(deleteForever(note.id))}
-            ></DeleteForever>
+            <Tooltip title="Restore">
+              <RestoreFromTrash
+                fontSize="small"
+                onClick={() => {
+                  dispatch(restoreNote(note.id));
+                  dispatch(
+                    handleOpen({
+                      snackBarMessage: 'Note Restored',
+                      snackBarOpen: true,
+                      snackBarType: 'success',
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
+            <Tooltip title="Delete">
+              <DeleteForever
+                fontSize="small"
+                onClick={() => {
+                  dispatch(deleteForever(note.id));
+                  dispatch(
+                    handleOpen({
+                      snackBarMessage: 'Deleted Permanently',
+                      snackBarOpen: true,
+                      snackBarType: 'success',
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
           </>
         ) : null}
       </CardActions>

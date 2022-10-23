@@ -1,11 +1,29 @@
 import { Autocomplete, TextField, Stack } from '@mui/material';
 import { Label } from '.';
+import { RootState, useAppSelector, useAppDispatch } from '../store';
 
-const Tags: React.FunctionComponent<{ labels: Label[] }> = ({ labels }) => {
+import { updateTags } from '../store/noteSlice';
+
+const Tags: React.FunctionComponent<{ noteID: string }> = ({ noteID }) => {
+  const labels = useAppSelector((state: RootState) => state.label);
+  const dispatch = useAppDispatch();
+  const notes = useAppSelector((state: RootState) => state.note);
+
+  const handleChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    value: Label[]
+  ) => {
+    dispatch(updateTags([noteID, value]));
+  };
+
   return (
     <Stack
       spacing={1}
-      sx={{ width: '100%', height: 'max-content', marginTop: '20px' }}
+      sx={{
+        width: '100%',
+        height: 'max-content',
+        marginTop: '20px',
+      }}
     >
       <Autocomplete
         multiple
@@ -13,12 +31,17 @@ const Tags: React.FunctionComponent<{ labels: Label[] }> = ({ labels }) => {
         size="small"
         options={labels}
         getOptionLabel={(option) => option.title}
-        defaultValue={[labels[0]]}
         filterSelectedOptions
         forcePopupIcon={false}
-        disablePortal={true}
-        renderInput={(params) => <TextField {...params} />}
-        sx={{ border: 'none', boxShadow: 'none' }}
+        onChange={(event, value) => handleChange(event, value)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            size="small"
+            variant="standard"
+            value={notes[0].labels}
+          />
+        )}
       />
     </Stack>
   );

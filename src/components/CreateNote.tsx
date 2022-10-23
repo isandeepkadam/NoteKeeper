@@ -3,18 +3,18 @@ import { nanoid } from 'nanoid';
 import { useState, useRef } from 'react';
 // store
 import { useAppDispatch } from '../store';
-import { addNote } from '../store/noteSlice';
+import { addNote, Note } from '../store/noteSlice';
 
 const CreateNote = () => {
   const [showTextField, setShowtextField] = useState(false);
-  const [note, setNote] = useState({
+  const [note, setNote] = useState<Note>({
     heading: '',
     text: '',
     id: nanoid(),
     archieved: false,
     trash: false,
     completed: false,
-    labels: [{ title: 'hello' }, { title: 'label2' }],
+    labels: [],
   });
 
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ const CreateNote = () => {
       archieved: false,
       trash: false,
       completed: false,
-      labels: [{ title: 'hello' }, { title: 'label2' }],
+      labels: [],
     });
 
     if (note.heading || note.text) {

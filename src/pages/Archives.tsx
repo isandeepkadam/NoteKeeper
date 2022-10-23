@@ -6,8 +6,8 @@ import { RootState, useAppSelector } from '../store';
 function Archives() {
   const notes = useAppSelector((state: RootState) => state.note);
 
-  const archivedNotes = notes.filter((note) => note.archieved && !note.trash);
-
+  const archivedNotes = notes.filter((note) => note.archieved);
+  console.log(notes);
   return (
     <Container>
       <Grid container spacing={4}>
