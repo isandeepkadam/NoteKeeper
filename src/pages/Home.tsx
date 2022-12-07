@@ -1,14 +1,11 @@
 import React from 'react';
-
 import { Alert, Grid, Snackbar } from '@mui/material';
-
 import { Container } from '@mui/system';
 import { CreateNote, NoteCard } from '../components';
 //Store
 import { RootState, useAppDispatch, useAppSelector } from '../store';
 import { handleClose } from '../store/snackBarSlice';
-//
-import { useDrop } from 'react-dnd';
+
 function Home() {
   const dispatch = useAppDispatch();
   const notes = useAppSelector((state: RootState) => state.note);
@@ -16,24 +13,11 @@ function Home() {
   //snackbar
   const openSnack = useAppSelector((state: RootState) => state.snackBar);
 
-  // Drag and Drop
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: 'note',
-    drop: (item: { id: string }) => addNoteToBoard(item.id),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  }));
-
-  const addNoteToBoard = (id: string) => {
-    console.log(id);
-  };
-
   return (
     <div>
       <CreateNote />
 
-      <Container ref={drop}>
+      <Container>
         <Grid container spacing={4}>
           {displayNotes.map((item) => {
             return (

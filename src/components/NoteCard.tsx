@@ -31,8 +31,6 @@ import {
 } from '../store/noteSlice';
 import { EditNote, Label } from '.';
 
-import { useDrag } from 'react-dnd';
-
 const NoteCard: React.FunctionComponent<{
   note: Note;
 }> = ({ note }) => {
@@ -43,24 +41,13 @@ const NoteCard: React.FunctionComponent<{
     dispatch(updateTags([noteID, removedTag]));
   };
 
-  //Drop
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'note',
-    item: { id: note.id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
   return (
     <Card
-      ref={drag}
       sx={{
         width: '300px',
         minHeight: '200px',
         maxHeight: 'max-content',
         boxShadow: 'none',
-        border: isDragging ? '1px dotted #e0e0e0' : '1px solid #e0e0e0',
         borderRadius: '8px',
         backgroundColor: '',
       }}
