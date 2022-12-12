@@ -14,6 +14,7 @@ export const theme = createTheme({
       // dark: will be calculated from palette.secondary.main,
       contrastText: '#ffcc00',
     },
+
     // Provide every color token (light, main, dark, and contrastText) when using
     // custom colors for props in Material UI's components.
     // Then you will be able to use it like this: `<Button color="custom">`
@@ -32,4 +33,18 @@ export const theme = createTheme({
     // // E.g., shift from Red 500 to Red 300 or Red 700.
     // tonalOffset: 0.2,
   },
+  components: {
+    // Name of the component
+    MuiButton: {
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          // Some CSS
+          fontSize: '20rem',
+        },
+      },
+    },
+  },
 });
+
+export default theme;

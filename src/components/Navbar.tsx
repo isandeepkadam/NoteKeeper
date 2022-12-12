@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import { useState } from 'react';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
 import {
   Box,
   Drawer,
@@ -16,14 +16,8 @@ import {
   ListItemText,
 } from '@mui/material';
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  Menu,
-  Inbox,
-  Mail,
-} from '@mui/icons-material';
-
+import { Menu, Inbox, Mail } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -96,8 +90,7 @@ const StyledDrawer = styled(Drawer, {
 }));
 
 export default function MiniDrawer() {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -115,12 +108,12 @@ export default function MiniDrawer() {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={() => setOpen(!open)}
             edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
+            // sx={{
+            //   marginRight: 5,
+            //   ...(open && { display: 'none' }),
+            // }}
           >
             <Menu />
           </IconButton>
@@ -129,49 +122,34 @@ export default function MiniDrawer() {
           </Typography>
         </Toolbar>
       </StyledAppBar>
-      <StyledDrawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+      {/* <DrawerHeader>
+        <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
           </IconButton>
-        </DrawerHeader>
+      </DrawerHeader> */}
+      <StyledDrawer variant="permanent" open={open}>
         <Divider />
-        <List>
+        <List
+          onMouseOver={() => setOpen(true)}
+          onMouseOut={() => setOpen(false)}
+        >
           <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-                borderRadius: '0px 25px 25px 0px',
+            <NavLink
+              to="/home"
+              style={{
+                color: 'inherit',
+                textDecoration: 'none',
               }}
-            >
-              <ListItem
-                sx={{
-                  minWidth: 0,
-                  maxWidth: 2,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                <Mail />
-              </ListItem>
-              <ListItemText primary={'what'} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem
-              key={text}
-              disablePadding
-              sx={{ display: 'block', borderRadius: '0px 25px 25px 0px' }}
+              className={({ isActive }) =>
+                isActive ? 'activeClassName' : undefined
+              }
             >
               <ListItemButton
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
-                  borderRadius: '0px 25px 25px 0px',
+                  borderRadius: open ? '0px 25px 25px 0px' : '100%',
                 }}
               >
                 <ListItem
@@ -182,12 +160,43 @@ export default function MiniDrawer() {
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <Inbox /> : <Mail />}
+                  <Mail />
                 </ListItem>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={'what'} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
-            </ListItem>
-          ))}
+            </NavLink>
+          </ListItem>
+
+          {['Notes', 'Reminders', 'Edit Labels', 'Archives', 'Trash'].map(
+            (text, index) => (
+              <ListItem
+                key={text}
+                disablePadding
+                sx={{ display: 'block', borderRadius: '0px 25px 25px 0px' }}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                    borderRadius: open ? '0px 25px 25px 0px' : '100%',
+                  }}
+                >
+                  <ListItem
+                    sx={{
+                      minWidth: 0,
+                      maxWidth: 2,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {index % 2 === 0 ? <Inbox /> : <Mail />}
+                  </ListItem>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            )
+          )}
         </List>
       </StyledDrawer>
       <DrawerHeader />
