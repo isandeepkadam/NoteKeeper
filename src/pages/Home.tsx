@@ -14,7 +14,7 @@ function Home() {
   const openSnack = useAppSelector((state: RootState) => state.snackBar);
 
   return (
-    <div>
+    <Container>
       <CreateNote />
 
       <Container>
@@ -49,7 +49,7 @@ function Home() {
           {openSnack.snackBarMessage}
         </Alert>
       </Snackbar>
-    </div>
+    </Container>
   );
 }
 

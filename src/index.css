@@ -2,11 +2,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-decoration: none;
 }
-.body {
+html {
+  /* background-color: #151515; */
+}
+/* .body {
   height: 100vh;
   display: flex;
-}
+} */
 .activeClassName {
   background: yellow;
 }

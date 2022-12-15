@@ -49,7 +49,8 @@ const NoteCard: React.FunctionComponent<{
         maxHeight: 'max-content',
         boxShadow: 'none',
         borderRadius: '8px',
-        backgroundColor: '',
+        backgroundColor: 'inherit',
+        border: '1px solid black',
       }}
     >
       <CardContent>

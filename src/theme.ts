@@ -40,7 +40,7 @@ export const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          fontSize: '20rem',
+          // fontSize: '1rem',
         },
       },
     },

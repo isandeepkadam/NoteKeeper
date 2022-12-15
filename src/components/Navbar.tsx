@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { styled, Theme, CSSObject } from '@mui/material/styles';
 import {
   Box,
   Drawer,
@@ -7,17 +6,21 @@ import {
   AppBarProps as MuiAppBarProps,
   Toolbar,
   List,
-  CssBaseline,
   Typography,
   Divider,
   IconButton,
   ListItem,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
+  styled,
+  useTheme,
+  Theme,
+  CSSObject,
 } from '@mui/material';
-
 import { Menu, Inbox, Mail } from '@mui/icons-material';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -46,7 +49,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -61,14 +63,6 @@ const StyledAppBar = styled(AppBar, {
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   }),
 }));
 
@@ -90,6 +84,7 @@ const StyledDrawer = styled(Drawer, {
 }));
 
 export default function MiniDrawer() {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -102,7 +97,6 @@ export default function MiniDrawer() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
       <StyledAppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
@@ -110,96 +104,53 @@ export default function MiniDrawer() {
             aria-label="open drawer"
             onClick={() => setOpen(!open)}
             edge="start"
-            // sx={{
-            //   marginRight: 5,
-            //   ...(open && { display: 'none' }),
-            // }}
+            sx={{
+              marginRight: 5,
+              // ...(open && { display: 'none' }),
+            }}
           >
             <Menu />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Notekeeper
+            NoteKeeper
           </Typography>
         </Toolbar>
       </StyledAppBar>
-      {/* <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
-          </IconButton>
-      </DrawerHeader> */}
       <StyledDrawer variant="permanent" open={open}>
+        <DrawerHeader />
         <Divider />
-        <List
-          onMouseOver={() => setOpen(true)}
-          onMouseOut={() => setOpen(false)}
-        >
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <NavLink
-              to="/home"
-              style={{
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-              className={({ isActive }) =>
-                isActive ? 'activeClassName' : undefined
-              }
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                  borderRadius: open ? '0px 25px 25px 0px' : '100%',
-                }}
-              >
-                <ListItem
-                  sx={{
-                    minWidth: 0,
-                    maxWidth: 2,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Mail />
-                </ListItem>
-                <ListItemText primary={'what'} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-
-          {['Notes', 'Reminders', 'Edit Labels', 'Archives', 'Trash'].map(
-            (text, index) => (
-              <ListItem
-                key={text}
-                disablePadding
-                sx={{ display: 'block', borderRadius: '0px 25px 25px 0px' }}
+        <List>
+          {['Notes', 'Archive', 'Edit Label', 'Trash'].map((text, index) => (
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <Link
+                to="/archives"
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <ListItemButton
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
-                    borderRadius: open ? '0px 25px 25px 0px' : '100%',
+                    borderRadius: open ? '0 25px 25px 0' : '50%',
+                    mx: open ? '' : 1,
                   }}
                 >
-                  <ListItem
+                  <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      maxWidth: 2,
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center',
                     }}
                   >
                     {index % 2 === 0 ? <Inbox /> : <Mail />}
-                  </ListItem>
+                  </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
-              </ListItem>
-            )
-          )}
+              </Link>
+            </ListItem>
+          ))}
         </List>
       </StyledDrawer>
-      <DrawerHeader />
     </Box>
   );
 }
